@@ -28,6 +28,25 @@ func TestRender(t *testing.T) {
 	}
 }
 
+func TestRenderPlainText(t *testing.T) {
+	contentStates := []draftjs.ContentState{}
+	var err error
+	if err = json.Unmarshal([]byte(TestString), &contentStates); err != nil {
+		t.Errorf("Failed unmarshal content: %v", err)
+		return
+	}
+
+	i := 0
+	for _, contentState := range contentStates {
+		s := draftjs.RenderPlainText(&contentState)
+		if s != NeedStringPlain[i] { // TODO: make proper test strings
+			t.Errorf("\n%s\n", s)
+			t.Errorf("\n%s\n", NeedString[i])
+		}
+		i++
+	}
+}
+
 var S string // preventing compiler optimization
 
 func BenchmarkRender(b *testing.B) {
